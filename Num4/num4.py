@@ -4,7 +4,7 @@ import time
 
 def shermanMorrison(n, b):
     print(f"\nWlasna implementacja dla N = {n}")
-    A = []
+    A = [] #Zastosowanie triku na rozlozenie macierzy na [[1, ...] ...] + A - 1
     A.append([11] * n)
     A.append([7] * (n-1) + [0])
 
@@ -25,9 +25,9 @@ def shermanMorrison(n, b):
     for i in range(len(z)):
         y.append(z[i] - x[i] * delta)
 
-    end = time.time() - start
+    end = time.time()
     print(y)
-    return end
+    return end-start
 
 def checkNumpy(n, b):
     print(f"\nWynik z biblioteki numpy dla N = {n}")
@@ -41,31 +41,31 @@ def checkNumpy(n, b):
     return end - start
 
 def plot_execution_time():
-    n_values = list(range(10, 800, 150))
-    custom_implementation_times = []
-    numpy_implementation_times = []
+    N = []
+    num = []
+    real = []
+    for i in range(50, 15000, 200):
+        n = i
+        N.append(n)
+        b = [5]*n
 
-    for n in n_values:
-        b = [5] * n
-        custom_time = shermanMorrison(n, b)
-        numpy_time = checkNumpy(n, b)
-        custom_implementation_times.append(custom_time)
-        numpy_implementation_times.append(numpy_time)
+        num.append(checkNumpy(n, b))
+        real.append(shermanMorrison(n, b))
 
-    plt.plot(n_values, custom_implementation_times, label='Wlasna implementacja')
-    plt.plot(n_values, numpy_implementation_times, label='NumPy')
-    plt.xlabel('N')
-    plt.ylabel('Czas wykonania (s)')
-    plt.title('Wykres czasu wykonania w zależności od N')
-    plt.legend()
+    plt.grid(True)
+    plt.title('Czas pracy programu.')
+    plt.xlabel('n')
+    plt.ylabel('mikrosekundy')
+    plt.yscale('log')
+
+    plt.plot(N, num)
+    plt.plot(N, real)
+    plt.legend(['Czas pracy biblioteki numpy', 'Czas pracy mojego algorytmu'])
     plt.show()
-
 def main():
-    n = 80
-    b = [5] * n
-    shermanMorrison(n, b)
-    checkNumpy(n, b)
-    plot_execution_time()
+    checkNumpy(80, [5]*80)
+    shermanMorrison(80, [5]*80)
+    #plot_execution_time()
 
 if __name__ == "__main__":
     main()
